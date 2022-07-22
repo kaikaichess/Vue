@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    
+-->
+    
+    <div class="root">
+        <ul>
+            <!-- 遍历数组 -->
+            <li v-for="(item, index) in persons" :key="item.id">{{item.name}}-{{item.age}}</li>
+        </ul>
+        <hr>
+        <ul>
+            <!-- 遍历对象 -->
+            <li v-for="(value, key) in cars">{{value}}-{{key}}</li>
+        </ul>
+        <hr>
+        <ul>
+            <!-- 遍历字符串 -->
+            <li v-for="(char, index) in str">{{char}}-{{index}}</li>
+        </ul>
+        <hr>
+        <ul>
+            <!-- 遍历指定次数 -->
+            <li v-for="(number, index) in 5">{{number}}-{{index}}</li>
+        </ul>
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+    
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                persons: [
+                    {id:'001', name: '张三', age: 18},
+                    {id:'002', name: '李四', age: 19},
+                    {id:'003', name: '王五', age: 20}
+                ],
+                cars: {
+                    name: '奥迪',
+                    price: '70万',
+                    color: '黑色'
+                },
+                str: 'hello'
+            },
+            methods: {
+                
+            }
+        })
+    </script>
+</body>
+</html>

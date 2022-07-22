@@ -9,7 +9,14 @@
     <script src="../js/vue.js"></script>
 </head>
 <body>
-    
+    <!-- 
+        computed和watch的区别：
+            1.computed能完成的功能，watch都可以完成
+            2.watch能完成的功能，computed不一定能完成（比如异步操作）
+        重要原则：
+            1.被Vue管理的函数，最好写成普通函数，这样this指向的才是vm对象
+            2.不被Vue管理的函数，最好写成箭头函数，这样this才能指向vm对象
+    -->
     <div class="root">
         姓：<input type="text" v-model="firstName"><br>
         名：<input type="text" v-model="lastName"><br>
