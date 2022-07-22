@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天气案例_深度监视</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    深度监视：
+        (1)Vue中的watch默认不监视对象内部值的改变
+        (2)配合deep:true可以监视对象内部值的改变
+    备注：
+        (1)Vue自身可以监视对象内部值的改变，但Vue提供的watch默认不可以（除非deep:true）
+        (2)使用watch时要根据监视对象的具体结构来判断是否使用深度监视
+-->
+    
+    <div class="root">
+        <h1>今天天气很{{info}}</h1>
+        <button @click="change">切换天气</button><hr/>
+        <h3>a的值是{{numbers.a}}</h3>
+        <button @click="numbers.a++">点我让a++</button>
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+    
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                isHot: true,
+                numbers: {
+                    a:1,
+                    b:1
+                }
+            },
+            methods: {
+                change() {
+                    this.isHot = !this.isHot
+                }
+            },
+            computed: {
+                info() {
+                    return this.isHot ? '炎热' : '凉爽'
+                }
+            },
+            watch: {
+                isHot: { // 'isHot'简写为isHot    
+                    // handler函数什么时候调用? 当isHot发生改变时。
+                    handler(newValue, oldValue) {
+                        console.log('isHot被修改了', newValue, oldValue);
+                    }
+                },
+                // 监视多级结构中某个属性的变化时，属性名一定要用原始写法'numbers.a'，而不是简写numbers.a
+                'numbers.a': {
+                    handler() {
+                        console.log('a的值发生了改变');
+                    }
+                },
+
+                // 当watch监视对象是一个对象时，如果不打开deep，那监视的就是这个对象的地址值，所以对象内部数据虽然发生改变，
+                // 但是地址值并没有发生改变，所以其实watch并没有监视到对象内部的数据变化（但是内部值改变时，Vue还是会修改所依赖内部值的变量，只是watch监视不到）
+                numbers: { 
+                    deep:true, // 深度监视，默认值为false
+                    handler() {
+                        console.log('numbers的值发生了改变');
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

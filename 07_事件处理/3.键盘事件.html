@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>键盘事件</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    1.Vue中常用的按键别名
+        回车：enter
+        删除（包括退格）：delete
+        退出：esc
+        空格：space
+        换行：tab
+        上下左右：up、down、left、right
+    2.Vue中未提供别名的按键，可以使用按键的key值去判断（注意key值不是keyCode），但是注意要转为kebab-case（短横线命名，比如大写锁定为caps-lock）
+    3.特别地，tab按键本身有切换焦点的作用，所以tab一定要搭配keydown事件来使用，不能使用keyup，包括一些系统修饰按键（Ctrl、Alt、shift、meta\Win）
+    他们可以使用keyup也可以使用keydown，但是他们使用keyup时需要在按住系统修饰按键后再按下其他的键，然后再松开按下的其他键，才能触发事件
+    4.不推荐使用判断keyCode的方式来指定具体按键（浏览器支持，但是已被废弃）
+    5.Vue.config.keyCodes.自定义键名 = 键码（keyCode）来自定义一个按键名（key）（也不太推荐）
+    6.系统修饰按键后面还可以跟一个键作为组合键使用，例如 @keyup.ctrl.y="showInfo" 就是按下Ctrl和y键才会触发事件
+-->
+    
+    <div class="root">
+        <h2>欢迎来到{{name}}</h2>
+        <input type="text" placeholder="按下回车提示输入" @keyup.enter="showInfo">
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+        Vue.config.keyCodes.xxx = 14 // 定义了一个别名按键
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                name: 'atguigu',
+            },
+            methods: {
+                showInfo(e) {
+                    console.log(e.target.value);
+                }
+            }
+        })
+    </script>
+</body>
+</html>

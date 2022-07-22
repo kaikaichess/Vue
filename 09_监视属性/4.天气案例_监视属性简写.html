@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天气案例_监视属性简写</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    
+-->
+    
+    <div class="root">
+        <h1>今天天气很{{info}}</h1>
+        <button @click="change">切换天气</button><hr/>
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+    
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                isHot: true,
+            },
+            methods: {
+                change() {
+                    this.isHot = !this.isHot
+                }
+            },
+            computed: {
+                info() {
+                    return this.isHot ? '炎热' : '凉爽'
+                }
+            },
+            watch: {
+                // 完整写法
+                // isHot: {     
+                //     immediate: true,
+                //     deep: true,
+                //     handler(newValue, oldValue) {
+                //         console.log('isHot被修改了', newValue, oldValue);
+                //     }
+                // }
+
+                // 简写，简写形式只有在immediate、deep不使用时写，把要监视的属性写作一个函数，这个函数就相当于handler函数
+                isHot(newValue, oldValue) {
+                    console.log('isHot被修改了', newValue, oldValue);
+                }
+            }
+        })
+
+        // 完整写法
+        // vm.$watch('isHot', {
+        //     immediate: true,
+        //     deep: true,
+        //     handler(newValue, oldValue) {
+        //         console.log('isHot被修改了', newValue, oldValue);
+        //     }
+        // })
+
+        // 简写,简写形式只有在immediate、deep不使用时写
+        vm.$watch('isHot', function(newValue, oldValue) {
+            console.log('isHot被修改了', newValue, oldValue);   
+        })
+    </script>
+</body>
+</html>

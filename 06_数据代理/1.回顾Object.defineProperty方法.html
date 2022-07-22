@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据代理</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--                         
+
+-->
+
+    <div class="root">
+        
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+        
+        let number = 18
+        let person = {
+            name: '张三',
+            sex: '男'
+        }
+        Object.defineProperty(person, 'age', {
+            // value: 18,
+            // enumerable: true, // 控制属性是否可被遍历，默认值为false
+            // writable: true, // 控制属性值是否可被修改，默认值为false
+            // configurable: true, // 控制属性是否可以被删除，默认值为false
+            get() {  // 当有人读取Object.defineProperty所定义的属性值（此处是age）时，就会调用get函数(getter)
+                return number
+            },
+            set(value) { // 当有人修改Object.defineProperty所定义的属性值（此处是age）时，就会调用set函数(setter)，且会收到修改的具体值
+
+            }
+        })
+        console.log(person);
+    </script>
+</body>
+</html>
