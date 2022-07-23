@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>列表过滤</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    
+-->
+    
+    <div class="root">
+        <input type="text" placeholder="请输入名字" v-model="keyWord">
+        <ul>
+            <!-- 遍历数组 -->
+            <li v-for="(item, index) in filPersons" :key="item.id">{{item.name}}-{{item.age}}-{{item.sex}}</li>
+        </ul>
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+        
+        // 用watch实现
+        // const vm = new Vue({
+        //     el: '.root',
+        //     data: {
+        //         persons: [
+        //             {id:'001', name: '马冬梅', age: 18, sex: '女'},
+        //             {id:'002', name: '周冬雨', age: 19, sex: '女'},
+        //             {id:'003', name: '周杰伦', age: 20, sex: '男'},
+        //             {id:'004', name: '温兆伦', age: 21, sex: '男'}
+        //         ],
+        //         filPersons: [],
+        //         keyWord: ''
+        //     },
+        //     watch: {
+        //         keyWord: {
+        //             immediate: true,
+        //             handler(newValue) {
+        //                 this.filPersons = this.persons.filter((p) => {
+        //                     return p.name.indexOf(newValue) !== -1
+        //                 }) 
+        //             }
+        //         }
+        //     }
+        // })
+
+        // 用计算属性
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                persons: [
+                    {id:'001', name: '马冬梅', age: 18, sex: '女'},
+                    {id:'002', name: '周冬雨', age: 19, sex: '女'},
+                    {id:'003', name: '周杰伦', age: 20, sex: '男'},
+                    {id:'004', name: '温兆伦', age: 21, sex: '男'}
+                ],
+                keyWord: ''
+            },
+            computed: {
+                filPersons() {
+                    return this.persons.filter((p) => {
+                        return p.name.indexOf(this.keyWord) !== -1
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+</html>
