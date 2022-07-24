@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义指令</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    自定义指令：
+        1.语法
+            (1).局部指令：
+            new Vue({                                           new Vue({
+                directives() {指令名:回调函数}        或             directives() {指令名:配置对象}
+            })                                                  })
+            (2).全局指令：
+            Vue.directive(指令名, 回调函数)  或  Vue.directive(指令名, 配置对象)
+        2.配置对象中的三个回调：
+            (1)bind：初始化时，元素与自定义指令绑定时调用
+            (2)inserted：指令元素被插入页面时调用
+            (3)update：指令所在的模板被重新解析时调用
+        3.备注：
+            (1)指令定义时不需要加"v-"，但使用时要加
+            (2)指令名如果是多个单词时，不要使用camelCase(驼峰命名法)，而是要使用kebab-case(-连接法)，并且指令名要用原始写法
+
+-->
+    
+    <div class="root">
+        <h2>当前的n: <span v-text="n"></span></h2>
+        <h2>放大后的n: <span v-big-number="n"></span></h2>
+        <button @click="n++">点我n+1</button>
+        <hr>
+        <input type="text" v-fbind:value="n">
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+
+        // 创建一个全局的自定义指令
+        // Vue.directive('fbind', {  
+        //     bind(element, binding) {
+        //         element.value = binding.value
+        //     },
+        //     inserted(element, binding) {
+        //         element.focus()
+        //     },
+        //     update(element, binding) {
+        //         element.value = binding.value
+        //     }
+        // })
+    
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                n: 1
+            },
+            directives: {
+                'big-number'(element, binding) { // 若指令名中出现-，则要使用原始写法
+                    element.innerText = binding.value * 10
+                },
+                fbind: {
+                    // 初始化时，元素与自定义指令绑定时调用
+                    bind(element, binding) {
+                        element.value = binding.value
+
+                    },
+                    // 指令元素被插入页面时调用
+                    inserted(element, binding) {
+                        element.focus()
+                    },
+                    // 指令所在的模板被重新解析时调用
+                    update(element, binding) {
+                        element.value = binding.value
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

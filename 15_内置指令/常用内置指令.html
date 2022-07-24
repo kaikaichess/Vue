@@ -7,9 +7,14 @@
     <title>常用内置指令</title>
     <!-- 引入Vue -->
     <script src="../js/vue.js"></script>
+    <style>
+        [v-cloak] { /* 属性选择器，选择带有v-cloak属性的标签 */
+            display: none;
+        }
+    </style>
 </head>
 <body>
-<!-- 
+<!--  
     v-bind：单向绑定解析表达式，可以简写为:xxx
     v-mode：双向数据绑定
     v-for：遍历数组、对象、字符串
@@ -21,12 +26,28 @@
     v-html：v-html和v-text相比，v-html支持标签的解析
         严重注意：v-html有安全性问题，在网站上动态渲染任意HTML是非常危险的，
         容易造成XSS攻击，一定要在可信的内容上使用v-html，永远不要用在用户提交的内容上
+    v-cloak：没有值，本质就是一个属性，Vue实例创建完毕并接管容器的时候，会删掉v-cloak属性，这样可以结合css解决网速慢时页面展示{{xxx}}的问题
+    v-once：没有值，本质就是一个属性，v-once所在的节点在初次动态渲染后，就视为静态内容了，以后数据的改变也不会引起v-once所在节点的结构更新
+    v-pre：其作用是跳过其所在节点的编译过程，可利用它跳过没有使用指令语法、插值语法的节点，会加快编译
 -->
     
     <div class="root">
+        <!-- v-text -->
         <div>{{name}}</div>
         <div v-text="name"></div>
+        <!-- v-html -->
         <div v-html="str"></div>
+        <!-- v-cloak -->
+        <div v-cloak>{{name}}</div>
+        <!-- v-once -->
+        <h2 v-once>初始的n值是:{{n1}}</h2>
+        <h2>当前的n值是:{{n1}}</h2>
+        <button @click="n1++">点我n+1</button>
+        <!-- v-pre -->
+        <h2 v-pre>Vue其实很简单</h2>
+        <h2 v-pre>当前的n值是:{{n2}}</h2>
+        <button @click="n2++" v-pre>点我n+1</button>
+
     </div>
     <script>
         Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
@@ -35,7 +56,9 @@
             el: '.root',
             data: {
                 name: 'atguigu',
-                str: '<h3>你好</h3>'
+                str: '<h3>你好</h3>',
+                n1: 1,
+                n2: 1,
             },
             methods: {
                 
