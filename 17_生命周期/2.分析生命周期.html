@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分析生命周期</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    
+-->
+    
+    <div class="root">
+        <h2>当前的n值是:{{n}}</h2>
+        <button @click="add">点我n+1</button>
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+    
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                n: 1,
+            },
+            methods: {
+                add() {
+                    this.n++
+                }
+            },
+            beforeCreate() {
+                console.log('beforeCreate');
+            },
+            created() {
+                console.log('created');
+            },
+            beforeMount() {
+                console.log('beforeMount');
+            },
+            mounted() {
+                console.log('mounted');
+            },
+            beforeUpdate() {
+                console.log('beforeUpdate');
+            },
+            updated() {
+                console.log('update');
+            },
+            beforeDestroy() {
+                console.log('beforeDestory');
+            },
+            destroyed() {
+                console.log('destory');
+            }
+        })
+    </script>
+</body>
+</html>
