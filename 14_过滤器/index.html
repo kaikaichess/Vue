@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/day.js"></script>
+    <title>过滤器</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    过滤器：
+        定义：对要显示的数据进行特点格式化后再显示(适用于一些逻辑简单的处理)
+        语法：
+            (1)注册过滤器：Vue.filter(name, callback) 或 new Vue(filters: {})
+            (2)使用过滤器：{{xxx | 过滤器名称}} 或 v-bind:属性 = "xxx | 过滤器名称"
+        备注：
+            (1)过滤器也可以接收额外的参数，多个过滤器可以串联使用
+            (2)过滤器并没有改变元数据，而是产生的新数据
+-->
+    
+    <div class="root">
+        <!-- methods实现 -->
+        <h2>显示格式化后的时间{{getFmtTime()}}</h2>
+        <!-- 计算属性实现 -->
+        <h2>显示格式化后的时间{{fmtTime}}</h2>
+        <!-- 过滤器实现 -->
+        <h2>显示格式化后的时间{{time | timeFormater}}</h2>
+    </div>
+
+    <div id="root">
+        <h2>{{msg | mySlice}}</h2>
+    </div>
+
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+
+        // 配置一个全局的过滤器，必须在new Vue之前执行
+        Vue.filter('mySlice', function(value) {
+            return value.slice(0,5)
+        })
+    
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                time: Date.now(),
+            },
+            methods: {
+                getFmtTime() {
+                    return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            computed: {
+                fmtTime() {
+                    return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            filters: {
+                timeFormater(value) {
+                    return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+                }
+            }
+        })
+
+        new Vue({
+            el: '#root',
+            data: {
+                msg: 'hello atguigu',
+            }
+        })
+    </script>
+</body>
+</html>
