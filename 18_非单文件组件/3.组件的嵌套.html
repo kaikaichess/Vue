@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>组件的嵌套</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    
+-->
+    
+    <div class="root">
+        
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+
+        // 定义student组件
+        const student = {
+            template: `
+                <div>
+                    <h2>学生姓名：{{name}}</h2>    
+                    <h2>学生年龄：{{age}}</h2>  
+                </div>
+            `,
+            data() {
+                return {
+                    name: '张三',
+                    age: '18'
+                }
+            }
+        }
+    
+        // 定义school组件
+        const school = Vue.extend({
+            template: `
+            <div>
+                <h2>学校名称：{{name}}</h2>
+                <h2>学校地址：{{address}}</address></h2>
+                <student></student>  
+            </div>
+            `,
+            data() {
+                return {
+                    name: 'atguigu',
+                    address: '上海'
+                }
+            },
+            // 注册组件(局部)
+            components: {
+                student
+            }
+        })
+        
+        // 定义hello组件
+        const hello = {
+            template: `
+                <div>
+                    <h2>hello</h2>    
+                </div>
+            `
+        }
+
+        // 定义app组件
+        const app = {
+            template: `
+                <div>
+                    <school></school>
+                    <hello></hello>    
+                </div>
+            `,
+            components: {
+                school,
+                hello
+            }
+        }
+
+        const vm = new Vue({
+            template: `<app></app>`,
+            el: '.root',
+            // 注册组件(局部)
+            components: {
+                app
+            },
+            methods: {
+                
+            }
+        })
+    </script>
+</body>
+</html>

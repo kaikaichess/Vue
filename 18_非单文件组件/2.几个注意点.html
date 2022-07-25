@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>几个注意点</title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    几个注意点：
+        1.关于组件名：
+            (1)一个单词组成时可写成school(首字母小写)或者School(首字母大写)
+            (2)多个单词组成时可写成my-school(kebab-case法，需要用原始写法)或者MySchool(CamelCase法，即大驼峰法，首字母都大写，但是需要Vue脚手架)
+            (3)组件名应该尽量避免和html标签重名
+        2.组件标签的写法：<school></school>或</school>(单标签形式也需要脚手架才能实现):可以通过name属性去定义组件在Vue开发者工具中的名字
+        3.组件定义的简写：const school = Vue.extend(option) 可简写为 const school = option
+-->
+    
+    <div class="root">
+        <school></school>
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+
+        const school = Vue.extend({
+            template: `
+            <div>
+                <h2>学校名称：{{name}}</h2>
+                <h2>学校地址：{{address}}</address></h2>
+            </div>
+            `,
+            data() {
+                return {
+                    name: 'atguigu',
+                    address: '上海'
+                }
+            }
+        })
+    
+        const vm = new Vue({
+            el: '.root',
+            components: {
+                school
+            },
+            methods: {
+                
+            }
+        })
+    </script>
+</body>
+</html>
