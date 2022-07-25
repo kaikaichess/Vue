@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <!-- 引入Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+<!--
+    1.一个重要的内置关系：VueComponent.prototype.__proto__ === Vue.prototype
+    2.为什么要有这个关系：让组件实例对象（vc）可以访问到Vue原型上的属性、方法
+-->
+    
+    <div class="root">
+    
+    </div>
+    <script>
+        Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
+    
+        // 定义school组件
+        const school = Vue.extend({
+            template: `
+            <div>
+                <h2>学校名称：{{name}}</h2>
+                <h2>学校地址：{{address}}</address></h2>
+            </div>
+            `,
+            data() {
+                return {
+                    name: 'atguigu',
+                    address: '上海'
+                }
+            },
+        })
+
+        const vm = new Vue({
+            el: '.root',
+            data: {
+                msg: '你好',
+            },
+            methods: {
+                
+            }
+        })
+    </script>
+</body>
+</html>
