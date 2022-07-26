@@ -9,8 +9,8 @@
 
 <script>
     // 组件交互相关的代码（数据、方法）
-    name: 'School'
     export default {
+        name: 'SchoolIndex',
             data() {
                 return {
                     name: 'atguigu',

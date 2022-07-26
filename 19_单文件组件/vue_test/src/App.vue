@@ -1,28 +1,21 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div>
+        <img src="./assets/logo.png" alt="logo">
+        <SchoolIndex/>
+        <StudentIndex/>
+    </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    // 引入组件
+    import SchoolIndex from './components/SchoolIndex.vue'
+    import StudentIndex from './components/StudentIndex.vue'
+    export default {
+        name: 'App',
+        components: {
+            SchoolIndex,
+            StudentIndex
+        }
+    }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
