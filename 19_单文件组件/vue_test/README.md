@@ -34,3 +34,26 @@
 # scoped样式
     作用：让样式在局部生效，防止各组件CSS样式冲突
     写法：<style scoped></scoped>
+# 总结TodoList案例
+    1.组件化编码流程：
+        (1)拆分静态组件：最贱要按照功能点拆分，命名不要与html元素冲突
+        (2)实现动态组件：考虑好数据的存放位置，数据是一个组件在用，还是一些组件在用，一个组件在用就放在该组件自身，一些组件在用则放在他们共同的父组件上（状态提升）
+        (3)实现交互：从绑定事件开始
+    2.props适用于：
+        (1)父组件 ===> 子组件 通信
+        (2)子组件 ===> 父组件 通信 （要求父组件先给子组件一个函数）
+    3.使用v-model时一定要注意v-model绑定的值不能是props传过来的值，因为props是单向传值，最好不要修改其值
+    4.props传过来的若是对象类型的值，修改对象中的属性不会报错（因为传过来的是对象的存储地址），但不推荐这样
+# webStorage
+    1.存储内容大小一般支持5MB左右
+    2.浏览器端通过 Window.sessionStorage 和 Window.localStorage属性来实现本地存储机制
+    3.相关API：
+        xxxStroage.setItem('key', 'value') 该方法接受一个键值对，会把键值对存到存储中，如果键名存在，则更新其对应的值
+        xxxStroage.getItem('key', 'value') 该方法接受一个键名，返回键名所对应的键值
+        xxxStroage.removeItem('key', 'value') 该方法接受一个键名，并把该键值对从存储中删除
+        xxxStroage.clear() 该方法清空存储
+    4.备注：
+        (1)sessionStorage存储的内容会随着关闭浏览器而消失
+        (2)localStorage存储的内容要手动清除才会消失
+        (3)xxxStroage.getItem('key', 'value')如果对应的键名获取不到，则会返回null
+        (4)JSON.parse(null)的结果仍是null

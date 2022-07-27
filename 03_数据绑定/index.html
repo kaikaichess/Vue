@@ -21,6 +21,7 @@
     <div class="root">
         单项数据绑定：<input type="text" :value="name"><br/>
         双项数据绑定：<input type="text" v-model="name">
+        <input type="checkbox" v-model="done">
     </div>
     <script>
         Vue.config.productionTip = false // 阻止vue在启动时生成生产提示
@@ -29,7 +30,7 @@
             el: '.root',
             data: {
                 name: 'atguigu',
-
+                done: true
             }
         })
     </script>
