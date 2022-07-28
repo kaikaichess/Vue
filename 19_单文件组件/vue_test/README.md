@@ -57,3 +57,14 @@
         (2)localStorage存储的内容要手动清除才会消失
         (3)xxxStroage.getItem('key', 'value')如果对应的键名获取不到，则会返回null
         (4)JSON.parse(null)的结果仍是null
+# 组件自定义事件
+    1.一种组件之间的通信方式，适用于 子组件===>父组件
+    2.使用场景：A是父组件，B是子组件，B想给A传数据，那么就要在A中给B绑定自定义事件（事件的回调在A中）
+    3.绑定自定义事件：
+        (1)第一种方式：在父组件中 <Demo @atguigu="test"/> 或 <Demo v-on:atguigu="test"/>
+        (2)第二种方式：在父组件中 <Demo ref="demo"/> ... mounted() {this.$refs.xxx.$on('atguigu', this.test)}
+        (3)若想让自定义事件仅触发一次，可以使用once修饰符或者$once方法
+    4.触发自定义事件：this.$emit('atguigu', 要传的参数)
+    5.解绑自定义事件：this.$off('atguigu')
+    6.组件上也可以绑定原生事件，但是需要native修饰符
+    7.注意：通过this.$refs.xxx.$on('atguigu', 回调函数)绑定自定义事件，回调要配置在methods中，或写成箭头函数，因为回调函数的this指向绑定事件的组件

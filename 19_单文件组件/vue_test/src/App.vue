@@ -5,11 +5,11 @@
     <div class="todo-container">
         <div class="todo-wrap">
 
-            <ListHeader :addTodo="addTodo"/>
+            <ListHeader @addTodo="addTodo"/>
 
             <ListIndex :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo"/>
 
-            <ListFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearItem="clearItem"/>
+            <ListFooter :todos="todos" @checkAllTodo="checkAllTodo" @clearItem="clearItem"/>
 
         </div>
     </div>
