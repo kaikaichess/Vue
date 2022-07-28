@@ -68,3 +68,24 @@
     5.解绑自定义事件：this.$off('atguigu')
     6.组件上也可以绑定原生事件，但是需要native修饰符
     7.注意：通过this.$refs.xxx.$on('atguigu', 回调函数)绑定自定义事件，回调要配置在methods中，或写成箭头函数，因为回调函数的this指向绑定事件的组件
+# 全局事件总线（GlobalEventBus）
+    1.一种组件之间通信的方式，适用于任何组件间的通信
+    2.安装全局事件总线
+        new Vue({
+            .......
+            beforeCreate() {
+                Vue.prototype.$bus = this
+            },
+            .......
+        })
+    3.使用事件总线
+        (1)接收数据：A组件想要接收数据，则在A组件中给$bus绑定自定义事件，事件的回调函数留在A组件自身
+            methods() {
+                demo(data) {......} 
+            }
+            .......
+            mounted() {
+                this.$bus.$on('xxx', this.demo)
+            }
+        (2)提供数据：this.$bus.$emit('xxx', data)
+    4.最好在beforeDestroy钩子中，用$off解绑当前组件所用到的事件
