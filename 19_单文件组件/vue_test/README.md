@@ -89,3 +89,62 @@
             }
         (2)提供数据：this.$bus.$emit('xxx', data)
     4.最好在beforeDestroy钩子中，用$off解绑当前组件所用到的事件
+# 消息订阅与发布（pubsub）
+    1.一种组件之间的通信方式，适用于任意组件之间的通信
+    2.使用步骤：
+        (1)安装pubsub：npm i pubsub-js
+        (2)引入：import pubsub from 'pubsub-js'
+        (3)接收数据：A组件想要接收数据，则在A组件中订阅消息，订阅的回调留在A组件自身
+            this.pid = pubsub.subscribe('hello', function(msgName, data) {}
+        (4)提供数据：pubsub.publish('xxx', data)
+        (5)最好在beforeDestroy钩子中，用pubsub.unscribe(pid)去取消订阅 
+# nextTick
+    1.语法：this.$nextTick(回调函数)
+    2.作用：在下一次DOM更新结束后执行其回调函数
+    3.一般用在数据改变之后，要基于更新后的DOM进行某些操作时，要在nextTick所指定的回调函数中执行
+# Vue封装的过渡与动画
+    1.作用；在插入、更新或者移除DOM元素时，在合适的时候给元素添加样式类名
+    2.图示：如transition.png所示
+    3.写法：
+        (1)准备好样式：
+            v-enter: 进入的起点（用于过渡）
+            v-enter-active: 进入的过程中（用于动画）
+            v-enter-to: 进入的终点（用于过渡）
+            v-leave: 离开的起点（用于过渡）
+            v-leave-active: 离开的过程中（用于动画）
+            v-leave-to: 离开的终点（用于过渡）
+        (2)使用<transition>包裹要添加过渡效果的元素，，并配置name属性
+        (3)如果有多个元素要添加相同效果则使用<transition-group>包裹，并要给元素指定key值
+            <transition-group name="hello" appear>
+                <h1 v-show="isShow" key="1">你好啊</h1>
+                <h1 v-show="isShow" key="2">尚硅谷</h1>
+            </transition-group>
+# Vue脚手架配置代理
+    方法一：在vue.config.js中添加如下配置
+         devServer: {
+           proxy: 'http://localhost:5000'
+         }
+        优点：配置简单，请求资源时直接发给前端（8080）即可
+        缺点：不能配置多个代理，不能灵活控制请求是否走代理
+        工作方式：若按照上述配置代理，当请求了前端不存在的资源时，那么该请求会转发给其他服务器（优先匹配前端资源）
+    方法二：编写vue.config.js配置代理具体规则
+        devServer: {
+            proxy: {
+            '/api': {  // 匹配所有以/api开头的请求路径
+                target: 'http://localhost:5000',  // 代理目标的基础路径
+                pathRewrite: {  // 重写请求路径，防止在代理服务器向服务器请求时路径出错
+                '^/api': ''
+                },
+                ws: true, // 用于支持websocket
+                changeOrigin: true // 用于控制请求头中的host值，默认值为true
+            },
+            '/foo': {  // 匹配所有以/foo开头的请求路径
+                target: 'http://localhost:5001',
+                pathRewrite: {
+                '^/foo': ''
+                },
+            }
+            }
+        }
+        优点：可以配置多个代理，且可以灵活控制请求是否走代理
+        缺点：配置略微繁琐，请求资源时必须加前缀

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import pubsub from 'pubsub-js'
     export default {
         name: 'SchoolIndex',
         data() {
@@ -18,9 +19,13 @@
             // this.$bus.$on('hello',(data) => {
             //     console.log('我是School组件, 收到了数据', data);
             // })
+            this.pubId = pubsub.subscribe('hello', function(msgName, data) {
+                console.log('有人发布了' + msgName + '消息', data);
+            })
         }, 
         beforeDestroy() {
             // this.$bus.$off('hello')
+            pubsub.unsubscribe(this.pubId)
         }  
     }
 </script>

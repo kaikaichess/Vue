@@ -2,13 +2,10 @@
 import Vue from 'vue'
 // 引入App
 import App from './App.vue'
-// 引入插件vue-resource
-import vueResource from 'vue-resource'
 // 关闭Vue生产提示
 Vue.config.productionTip = false
 
-// 使用插件vue-resource
-Vue.use(vueResource)
+
 
 // 创建Vue实例——vm
 new Vue({
