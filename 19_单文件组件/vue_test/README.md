@@ -148,3 +148,197 @@
         }
         优点：可以配置多个代理，且可以灵活控制请求是否走代理
         缺点：配置略微繁琐，请求资源时必须加前缀
+# 插槽
+    1.作用：让父组件可以向子组件指定位置插入html结构，也是一种组件间的通信方式，适用于 父组件===>子组件
+    2.分类：默认插槽、具名插槽、作用域插槽
+    3.使用方式：
+        1.默认插槽：
+            父组件中：
+                <CategoryIndex>
+                    <div>html结构</div>
+                </CategoryIndex>
+            子组件中：
+                <div>
+                    <!-- 定义一个插槽 -->
+                    <slot>默认值，当使用者没有传值时显示</slot>
+                </div>
+        2.具名插槽：
+            父组件中：
+                 <CategoryIndex>
+                    <template slot="center">
+                        <div>html结构1</div>
+                     </template>
+
+                     <template slot="footer">
+                        <div>html结构2</div>
+                     </template>
+                 </CategoryIndex>
+        3.作用域插槽：
+            1.理解：数据在组件的自身，但根据数据生成的结构需要由组件的使用者来决定。（games数据在CategoryIndex组件中，但使用数据所遍历出来的结构由APP组件决定）
+            2.具体编码：
+                父组件中：
+                    <CategoryIndex title="游戏">
+                        <template slot-scope="scopeDate">
+                            <!-- 生成的ul列表 -->
+                            <ul>
+                                <li v-for="(g, index) in scopeDate.games" :key="index">{{g}}</li>
+                            </ul>
+                        </template>
+                    </CategoryIndex>
+                子组件中：
+                    <div class="category">
+                        <slot :games="games">默认值，当使用者没有传值时显示</slot>
+                    </div>
+# Vuex
+    1.概念：在Vuex中实现集中式状态（数据）管理的一个Vue插件，对vue应用中多个组件的共享状态进行集中式的管理（读/写），也是一种组件间的通信方式，且适用于任意组件间通信
+    2.何时使用：多个组件需要共享数据时
+    3.搭建Vuex环境：
+        (1)创建文件：src/store/index.js
+            // 引入Vue
+            import Vue from 'vue'
+            // 引入Vuex
+            import Vuex from 'vuex'
+            // 使用插件vuex
+            Vue.use(Vuex)
+
+            // 准备actions——用于响应组件中的动作
+            const actions = {}
+            // 准备mutations——用于操作数据（state）
+            const mutations = {}
+            // 准备state——用于存储数据
+            const state = {}
+
+            // 创建store并暴露
+            export default new Vuex.Store({
+                // actions: actions,
+                actions,
+                // mutations: mutations,
+                mutations,
+                // state: state
+                state,
+            })
+        (2)在main.js中创建vm时传入store配置项
+    4.基本使用：
+        (1)初始化数据，配置actions，配置mutations，操作文件store.js
+            // 引入Vue
+            import Vue from 'vue'
+            // 引入Vuex
+            import Vuex from 'vuex'
+            // 使用插件vuex
+            Vue.use(Vuex)
+
+            // 准备actions——用于响应组件中的动作
+            const actions = {
+                incrementOdd(context, value) {
+                    if(context.state.sum % 2) {
+                        context.commit('INCREMENT', value)
+                    }
+                },
+                incrementWait(context, value) {
+                    setTimeout(() => {
+                        context.commit('INCREMENT', value)
+                    }, 500)
+                },
+            }
+
+            // 准备mutations——用于操作数据（state）
+            const mutations = {
+                INCREMENT(state, value) {
+                    state.sum += value
+                },
+                DECREMENT(state, value) {
+                    state.sum -= value
+                },
+            }
+
+            // 准备state——用于存储数据
+            const state = {
+                sum: 0 // 当前的和
+            }
+
+            // 创建store并暴露
+            export default new Vuex.Store({
+                // actions: actions,
+                actions,
+                // mutations: mutations,
+                mutations,
+                // state: state
+                state,
+            })
+        (2)组件中读取vuex中的数据：$store.state.sum
+        (3)组件中修改vuex中的数据：$store.dispatch('actions中的方法名', value) 或 $store.commit('mutations中的方法名', value)
+    备注：若没有网络请求或其他业务逻辑，组件中也可以越过actions，即不写dispatch，直接写commit
+    5.getters的使用：
+        (1)概念：在state中的数据需要经过加工后再使用，可以使用getters加工
+        (2)在store.js中追加getters配置
+            ......
+            const getters = {
+                bigSum(state) {
+                    return state.sum * 10
+                }
+            }
+
+            export default new Vuex.store({
+                ......
+                getters,
+                ......
+            })
+        (3)组件中读取数据$store.getters.bigSum
+    6.四个map方法的使用
+        (1)mapState方法：用于帮助我们映射state中的数据为计算属性
+            computed: {
+                ...mapState({sum: 'sum', school: 'school', subject: 'subject'})
+                ...mapState(['sum', 'school', 'subject'])
+            }
+        (2)mapGetters方法，用于帮助我们映射getters中的数据为计算属性
+            computed: {
+                ...mapGetters({bigSum: 'bigSum'})
+                ...mapGetters(['bigSum'])
+            }
+        (3)mapActions方法，用于帮助我们生成actions对话的方法，即包含$store.dispatch(xxx)的函数
+            methods: {
+                ...mapActions({incrementOdd: 'incrementOdd', incrementWait: 'incrementWait'})
+                ...mapActions(['incrementOdd', 'incrementWait'])
+            }
+        (4)mapMutations方法，用于帮助我们生成mutations对话的方法，即包含$store.commit(xxx)的函数
+            methods: {
+                ...mapMutations({increment: 'INCREMENT', decrement: 'DECREMENT'}),
+                ...mapMutations(['INCREMENT', 'DECREMENT']),
+            }
+    7.模块化+命名空间
+        (1)目的：让代码更好维护，让多种数据分类更加明确
+        (2)修改store.js
+            const countOptions = {
+                namespaced: true, // 开启命名空间
+                actions: { ... },
+                mutations: { ... },
+                state: {
+                    sum: 0,
+                    ...
+                },
+                getters: {
+                    bigSum(state) {
+                        return state.sum * 10
+                    }
+                }
+            }
+        (3)开启命名空间后，组件中读取state的数据
+            // 方式一，自己直接读取
+            this.$store.state.countOptions.sum
+            // 方式二，借助mapState读取
+            ...mapState('countOptions', ['sum', 'school', 'subject'])
+        (4)开启命名空间后，组件中读取getters的数据
+            // 方式一，自己直接读取
+            this.$store.getters['countOptions/sum']
+            // 方式二，借助mapGetters读取
+            ...mapGetters('countOptions', ['sum', 'school', 'subject'])
+        (5)开启命名空间后，组件中调用dispatch
+            // 方式一，自己直接调用
+            this.$store.dispatch('personOptions/addPersonWang', personObj)
+            // 方式二，借助mapActions读取
+            ...mapActions('countOptions', ['incrementOdd', 'incrementWait'])
+        (6)开启命名空间后，组件中调用commit
+            // 方式一，自己直接调用
+            this.$store.commit('personOptions/ADD_PERSON', personObj)
+            // 方式二，借助mapMutations读取
+            ...mapMutations('countOptions', ['INCREMENT', 'DECREMENT'])
