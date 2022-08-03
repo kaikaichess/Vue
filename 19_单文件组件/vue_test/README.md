@@ -342,3 +342,162 @@
             this.$store.commit('personOptions/ADD_PERSON', personObj)
             // 方式二，借助mapMutations读取
             ...mapMutations('countOptions', ['INCREMENT', 'DECREMENT'])
+# 路由：一个路由（route）就是一组映射关系（key-value），多个路由需要路由器（router）进行管理，在前端路由中，key是路径，value是组件
+    1.基本使用：
+        (1)安装vue-router，命令：npm i vue-router
+        (2)应用插件：Vue.use(VueRouter)
+        (3)编写router配置项：
+            // 引入组件
+            import VueRouter from 'vue-router'
+            import AboutIndex from '../components/About'
+            import HomeIndex from '../components/Home'
+
+            // 创建并暴露一个路由器
+            export default new VueRouter({
+                routes: [
+                    {
+                        path: '/about',
+                        component: AboutIndex
+                    },
+                    {
+                        path: '/home',
+                        component: HomeIndex
+                    }
+                ]
+            })
+        (4)实现切换：（active-class可以配置高亮样式）
+            <router-link class="list-group-item" active-class="active" to="/about">About</router-link>
+            <router-link class="list-group-item" active-class="active" to="/home">Home</router-link>
+        (5)指定展示位置：
+            <router-view></router-view>
+    2.几个注意点：
+        (1)路由组件通常放在pages文件夹中，一般组件通常放在components文件夹
+        (2)通过切换，“隐藏”了的路由组件，默认是被销毁掉的，需要的时候会重新再挂载
+        (3)每个组件都有自己的$route属性，里面存储着自己的路由信息
+        (4)整个应用只有一个router，可以通过$router属性获取
+# 多级（嵌套）路由
+    1.配置路由规则，使用children配置项：
+        routes: [
+            {
+                path: '/about',
+                component: AboutIndex
+            },
+            {
+                path: '/home',
+                component: HomeIndex,
+                children: [
+                    {
+                        path: 'news', // 此处一定不要写 "/news"
+                        component: NewsIndex
+                    },
+                    {
+                        path: 'message', // 此处一定不要写 "/message"
+                        component: MessageIndex
+                    },
+                ]
+            },
+        ]
+    2.跳转：
+        <router-link class="list-group-item" active-class="active" to="/home/news">News</router-link>
+# 路由的query参数
+    1.传递参数：
+        <!-- 跳转路由并携带query参数，to的字符串写法 -->
+        <!-- <router-link :to="`/home/message/detail?id=${message.id}&title=${message.title}`">{{message.title}}</router-link> -->
+        <!-- 跳转路由并携带query参数，to的对象写法 -->
+        <router-link :to="{
+            path: '/home/message/detail',
+            query: {
+                        id: message.id,
+                        title: message.title
+                    }
+        }">
+            {{message.title}}
+        </router-link>
+    2.接收参数：
+        $route.query.id
+        $route.query.title
+# 命名路由
+    1.作用：可以简化路由的跳转
+    2.如何使用：
+        (1)给路由命名：
+            {
+                ......
+                children: [
+                    {
+                        ......
+                        children: [
+                            {
+                                name: 'detail',
+                                path: 'detail', 
+                                component: DetailIndex
+                            }
+                        ]
+                    },
+                ]
+            }
+        (2)简化跳转：
+            <router-link :to="{
+                // path: '/home/message/detail',
+                name: 'detail', // 简化后可以通过名字来跳转
+                query: {
+                    id: message.id,
+                    title: message.title
+                }
+            }">
+                {{message.title}}
+            </router-link>&nbsp;&nbsp;
+# 路由的params参数
+    1.配置路由，声明接收params参数
+        {
+            ......
+            children: [
+                {
+                    path: 'message', // 此处一定不要写 "/message"
+                    component: MessageIndex,
+                    children: [
+                        {
+                            name: 'detail',
+                            path: 'detail/:id/:title', // 用占位符声明接收参数
+                            component: DetailIndex
+                        }
+                    ]
+                },
+            ]
+        },
+    2.传递参数：特别注意，路由携带params参数时，若使用to的对象写法，则不能使用path配置项，必须使用name配置项
+        <!-- 跳转路由并携带params参数，to的字符串写法 -->
+        <router-link :to="`/home/message/detail/${message.id}/${message.title}`">{{message.title}}</router-link>&nbsp;&nbsp;
+        <!-- 跳转路由并携带params参数，to的对象写法 -->
+        <router-link :to="{
+            // path: '/home/message/detail',
+            name: 'detail',
+            params: {
+                        id: message.id,
+                        title: message.title
+                    }
+        }">
+            {{message.title}}
+        </router-link>&nbsp;&nbsp;
+    3.接收参数：
+        $route.params.id
+        $route.params.title
+# 路由的props配置
+    作用：让路由组件更方便的收到参数
+        {
+            name: 'detail',
+            // path: 'detail/:id/:title', // 用占位符声明接收参数
+            path: 'detail',
+            component: DetailIndex,
+            // props的第一种写法，值为对象，该对象中所有的key: value都会以props的形式传给Detail组件
+            // props: {a: 1, b: 'hello'}
+            // props的第二种写法，值为布尔值，若为true则会把该路由组件收到的所有params参数以props的形式传给Detail组件
+            // props: true
+            // props的第三种写法，值为函数，配合query传值使用
+            props($route) {
+            return {id: $route.query.id, title: $route.query.title}
+        }
+# <router-link>的replace属性
+    1.作用：控制路由跳转时操作浏览器前进后退历史记录的模式
+    2.浏览器的历史记录有两种写入模式：分别为replace和push，push是追加历史记录，replace是替换当前历史记录，路由跳转时默认为push
+    3.如何开启replace模式：<router-link :replace="true" to="/about">About</router-link>，可直接简写为replace
+        
