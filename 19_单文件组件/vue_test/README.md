@@ -500,4 +500,38 @@
     1.作用：控制路由跳转时操作浏览器前进后退历史记录的模式
     2.浏览器的历史记录有两种写入模式：分别为replace和push，push是追加历史记录，replace是替换当前历史记录，路由跳转时默认为push
     3.如何开启replace模式：<router-link :replace="true" to="/about">About</router-link>，可直接简写为replace
+# 编程式路由导航
+    1.作用：不借助<router-link>标签实现路由跳转，让路由跳转更灵活（<router-link>标签在解析模板时会变成<a>标签）
+    2.具体编码：
+         this.$router.push({  // push跳转
+            name: 'detail',
+            query: {
+                        id: message.id,
+                        title: message.title
+                    }
+        }),
+        this.$router.replace({  // replace跳转
+            name: 'detail',
+            query: {
+                        id: message.id,
+                        title: message.title
+                    }
+        })
         
+        // 浏览器跳转记录后退
+        this.$router.back()
+        // 浏览器跳转记录前进
+        this.$router.forward()
+        // 浏览器跳转记录前进/后退，根据传入的数字进行判断，正数前进，负数后退，数值大小为跳转的步数
+        this.$router.go(-1)
+# 缓存路由组件
+    1.作用：让不展示的路由组件保持挂载，不被销毁
+    2.具体编码：
+        <keep-alive include="['NewsIndex', 'MessaIndex']">   // include中写要保持挂载的组件名
+            <router-view></router-view>
+        </keep-alive>
+# 两个新的生命周期钩子
+    1.作用：路由组件所独有的两个钩子，用于捕获路由组件的激活状态
+    2.具体名字：
+        (1)activated路由组件被激活时触发
+        (2)deactivated路由组件失活时触发
