@@ -535,3 +535,55 @@
     2.具体名字：
         (1)activated路由组件被激活时触发
         (2)deactivated路由组件失活时触发
+# 路由守卫
+    1.作用：对路由进行权限控制
+    2.分类：全局守卫、独享数位、组件内守卫
+    3.具体代码：
+        (1)全局守卫：
+            // 全局前置路由守卫，初始化和每次路由切换之前被调用
+            router.beforeEach((to, from, next) => {
+                if(to.meta.isAuth) { // 判断是否需要权限
+                    if(localStorage.getItem('school') === 'atguigu') {
+                        next() //放行
+                    } else {
+                        alert('无权限')
+                    }
+                } else (
+                    next() //放行
+                )
+            })
+
+            // 全局后置路由守卫，初始化和每次路由切换之后被调用
+            router.afterEach((to, from) => {
+                document.title = to.meta.title || '系统' // 修改后的网页title
+            })
+
+            export default 
+        (2)独享路由守卫：
+            beforeEnter: (to, from, next) => {
+                if(to.meta.isAuth) { // 判断是否需要权限
+                    if(localStorage.getItem('school') === 'atguigu') {
+                        next()
+                    } else {
+                        alert('无权限')
+                    }
+                } else {
+                    next()
+                }
+            }
+        (3)组件内守卫：只有通过路由进入或离开才会触发
+            // 通过路由规则，进入该组件时被调用
+            beforeRouteEnter(to, from, next) {}
+            // 通过路由规则，进入该组件时被调用
+            beforeRouteLeave(to, from, next) {}
+# 路由器的两种工作模式
+    1.对于一个url来说，hash值是#及其后面的内容
+    2.hash值不会包含在HTTP请求中，即hash值不会带给服务器
+    3.hash模式：
+        (1)地址中永远带着#号，不美观
+        (2)若以后将地址通过第三方手机app分享，若app校验严格，则地址会标记为不合法
+        (3)兼容性较好
+    4.history模式：
+        (1)地址干净美观
+        (2)兼容性和hash模式相比略差
+        (3)应用部署上线时需要后端人员支持，解决页面刷新页面服务端出现404的问题

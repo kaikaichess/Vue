@@ -7,7 +7,7 @@
                 <!-- 跳转路由并携带params参数，to的对象写法 -->
                 <router-link :to="{
                     // path: '/home/message/detail',
-                    name: 'detail',
+                    name: 'Detail',
                     query: {
                         id: message.id,
                         title: message.title
@@ -39,7 +39,7 @@
         methods: {
             pushShow(message) {
                 this.$router.push({
-                    name: 'detail',
+                    name: 'Detail',
                     query: {
                         id: message.id,
                         title: message.title
@@ -48,7 +48,7 @@
             },
             replaceShow(message) {
                 this.$router.replace({
-                    name: 'detail',
+                    name: 'Detail',
                     query: {
                         id: message.id,
                         title: message.title

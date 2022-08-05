@@ -10,26 +10,32 @@ import DetailIndex from '../pages/Detail'
 import VueRouter from 'vue-router'
 
 // 创建并暴露一个路由器
-export default new VueRouter({
+const router = new VueRouter({
     routes: [
         {
+            name: 'About',
             path: '/about',
-            component: AboutIndex
+            component: AboutIndex,
+            meta: {title: '关于'}
         },
         {
+            name: 'Home',
             path: '/home',
             component: HomeIndex,
             children: [
                 {
+                    name: 'News',
                     path: 'news', // 此处一定不要写 "/news"
-                    component: NewsIndex
+                    component: NewsIndex,
+                    meta: {isAuth: true, title: '新闻'},
                 },
                 {
+                    name: 'Message',
                     path: 'message', // 此处一定不要写 "/message"
                     component: MessageIndex,
                     children: [
                         {
-                            name: 'detail',
+                            name: 'Detail',
                             // path: 'detail/:id/:title', // 用占位符声明接收参数
                             path: 'detail',
                             component: DetailIndex,
@@ -40,11 +46,34 @@ export default new VueRouter({
                             // props的第三种写法，值为函数，配合query传值使用
                             props($route) {
                                 return {id: $route.query.id, title: $route.query.title}
-                            }
+                            },
+                            meta: {isAuth: true, title: '详情'}
                         }
-                    ]
+                    ],
+                    meta: {isAuth: true, title: '资讯 '}
                 },
-            ]
+            ],
+            meta: {title: '主页'}
         },
     ]
 })
+
+// 全局前置路由守卫，初始化和每次路由切换之前被调用
+// router.beforeEach((to, from, next) => {
+//     if(to.meta.isAuth) { // 判断是否需要权限
+//         if(localStorage.getItem('school') === 'atguigu') {
+//             next()
+//         } else {
+//             alert('无权限')
+//         }
+//     } else {
+//         next()
+//     }
+// })
+
+// 全局后置路由守卫，初始化和每次路由切换之后被调用
+// router.afterEach((to) => {
+//     document.title = to.meta.title || '系统'
+// })
+
+export default router
